@@ -1,2 +1,2 @@
-# RGE
+# RAGE
 My Game Engine
