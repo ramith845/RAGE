@@ -1,3 +1,9 @@
 // Directory
 .vs/
 bin/
+
+// Files
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
