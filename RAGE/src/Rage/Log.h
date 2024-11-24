@@ -1,7 +1,12 @@
 #pragma once
 
 #include "Core.h"
+// This ignores all warnings raised inside External headers
+#pragma warning(push, 1)
 #include "spdlog/spdlog.h"
+#include "spdlog/fmt/ostr.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#pragma warning(pop)
 
 namespace Rage
 {
@@ -12,8 +17,8 @@ namespace Rage
 		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
 		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
 	private:
-		static std::shared_ptr<spdlog::logger> s_CoreLogger;
-		static std::shared_ptr<spdlog::logger> s_ClientLogger;
+		static std::shared_ptr<RAGE_API spdlog::logger> s_CoreLogger;
+		static std::shared_ptr<RAGE_API spdlog::logger> s_ClientLogger;
 	};
 
 }

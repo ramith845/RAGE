@@ -1,4 +1,9 @@
+#include "rgpch.h"
 #include "Application.h"
+#include "ApplicationEvent.h"
+#include "MouseEvent.h"
+#include "KeyEvent.h"
+#include "Log.h"
 
 namespace Rage
 {
@@ -14,7 +19,12 @@ namespace Rage
 
 	void Application::Run()
 	{
-		while (false)
+		WindowResizedEvent event{ 1080, 1920 };
+		if (event.IsInCategory(EventCategory::Application))
+		{
+			RG_CORE_TRACE(event.ToString());
+		}
+		while (true)
 		{
 
 		}

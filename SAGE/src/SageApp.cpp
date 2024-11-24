@@ -16,7 +16,6 @@ private:
 };
 
 
-
 Rage::Application* Rage::CreateApplication()
 {
 	return new Sage();

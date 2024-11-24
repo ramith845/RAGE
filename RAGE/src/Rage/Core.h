@@ -9,3 +9,5 @@
 #else
   #error Rage support on non-windows platform is progress
 #endif // RG_WINDOWS_PLATFORM
+
+#define BIT(number) (1 << number)

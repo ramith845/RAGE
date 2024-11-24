@@ -7,7 +7,7 @@ int main(int argc, char** arv)
 	Rage::Log::Init();
 	RG_CLIENT_INFO("Baby Im up!");
 	RG_CORE_ERROR("bad Bitch Habbahabba!");
-
+	
 	auto app{ Rage::CreateApplication() };
 	app->Run();
 
