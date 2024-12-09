@@ -15,13 +15,15 @@ endif()
 set(config "${CMAKE_BUILD_TYPE}")
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
-
+set_property(GLOBAL PROPERTY USE_FOLDERS YES)
 
 project (Rage VERSION 1.0.0 LANGUAGES C CXX)
 
 add_library(rage_compiler_flags INTERFACE)
 target_compile_features(rage_compiler_flags INTERFACE cxx_std_20)
-target_compile_definitions(rage_compiler_flags INTERFACE "WINDOWS_PLATFORM")
+if(WIN32)
+	target_compile_definitions(rage_compiler_flags INTERFACE "WINDOWS_PLATFORM")
+endif()
 target_compile_options(rage_compiler_flags INTERFACE 
 						"$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall,-Wextra,-Wshadow,-Wformat=2,-Wunused>>"
 						"$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
@@ -30,6 +32,11 @@ target_compile_options(rage_compiler_flags INTERFACE
 # Include sub-projects.
 add_subdirectory (SAGE)
 add_subdirectory (RAGE)
+
+# Target grouping especially external deps
+set_target_properties(spdlog PROPERTIES FOLDER "vendor/SPDLOG")
+set_target_properties(glfw uninstall update_mappings PROPERTIES FOLDER "vendor/GLFW3")
+
 
 
 # Set output directories for SAGE

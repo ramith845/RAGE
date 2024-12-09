@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Rage/Core.h"
+#include "Core.h"
+#include "Log.h"
 
 namespace Rage {
 	enum class EventType
@@ -23,7 +24,7 @@ namespace Rage {
 
 	class RAGE_API Event
 	{
-		//friend class EventDispatcher;
+		friend class EventDispatcher;
 	public:
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
@@ -57,11 +58,11 @@ namespace Rage {
 		}
 
 		template <typename T>
-		bool Dispatcher(EventFn<T> function)
+		bool Dispatch(EventFn<T> function)
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.m_Handled = function(*(T*)&m_Event);
+				m_Event.m_Handled = function(*dynamic_cast<T*>(&m_Event));
 				return true;
 			}
 			return false;
@@ -71,12 +72,28 @@ namespace Rage {
 		Event& m_Event;
 	};
 
-	constexpr auto operator+(EventCategory ec) noexcept
+	inline constexpr auto operator+(EventCategory ec) noexcept
 	{
 		return static_cast<std::underlying_type_t<EventCategory>>(ec);
 	}
-	std::ostream& operator<<(std::ostream& os, const Event& event)
+	inline std::ostream& operator<<(std::ostream& os, const Event& event)
 	{
 		return os << event.ToString();
 	}
+
+	template<typename T>
+	struct fmt::formatter<T, std::enable_if_t<std::is_base_of<Event, T>::value, char>>
+		: fmt::formatter<std::string>
+	{
+		auto format(const T& event, fmt::format_context& ctx) const -> decltype(ctx.out())
+		{
+			return fmt::format_to(ctx.out(), "{}", event.ToString());
+		}
+	};
+
+	template <typename... T>
+	std::string StringFromArgs(fmt::format_string<T...> fmt, T&&... args) {
+		return fmt::format(fmt, std::forward<T>(args)...);
+	}
+
 }

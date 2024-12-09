@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Event.h"
+#include "Events/Event.h"
 
 namespace Rage
 {
@@ -15,12 +15,12 @@ namespace Rage
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "WindowResizedEvent: " <<"( " << m_Width << ", " << m_Height<<" )";
+			ss << "WindowResizedEvent: " << "( " << m_Width << ", " << m_Height << " )";
 			return ss.str();
 		}
 		EVENT_CLASS_TYPE(WindowResize)
 			EVENT_CLASS_CATEGORY(+EventCategory::Application)
-	
+
 	private:
 		float m_Height{}, m_Width{};
 	};

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Event.h"
+#include "Events/Event.h"
 
 namespace Rage {
 	class RAGE_API KeyEvent : public Event
@@ -48,22 +48,18 @@ namespace Rage {
 	class RAGE_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(int KeyCode, int RepeatCount)
-			: KeyEvent(KeyCode), m_RepeatCount(RepeatCount)
+		KeyReleasedEvent(int KeyCode)
+			: KeyEvent(KeyCode)
 		{
 		}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyReleasedEvent: " << m_KeyCode << ", repeated: " << m_RepeatCount;
+			ss << "KeyReleasedEvent: " << m_KeyCode;
 			return ss.str();
 		}
 
-		inline int GetRepeatCount() const { return m_RepeatCount; }
 		EVENT_CLASS_TYPE(KeyRelease)
-
-	private:
-		int m_RepeatCount{};
 	};
 }

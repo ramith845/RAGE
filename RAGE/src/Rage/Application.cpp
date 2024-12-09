@@ -1,15 +1,12 @@
 #include "rgpch.h"
 #include "Application.h"
-#include "ApplicationEvent.h"
-#include "MouseEvent.h"
-#include "KeyEvent.h"
-#include "Log.h"
 
 namespace Rage
 {
 	Application::Application()
 	{
-
+		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window->SetEventCBFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 	}
 
 	Application::~Application()
@@ -17,16 +14,33 @@ namespace Rage
 
 	}
 
+	void Application::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher{ e };
+		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
+
+		EventType et{ e.GetEventType() };
+		switch (et)
+		{
+		case EventType::MouseMove:
+			RG_CORE_TRACE("{0}", e);
+			break;
+		default:
+			break;
+		}
+	}
+
 	void Application::Run()
 	{
-		WindowResizedEvent event{ 1080, 1920 };
-		if (event.IsInCategory(EventCategory::Application))
+		while (m_IsRunning)
 		{
-			RG_CORE_TRACE(event.ToString());
+			m_Window->OnUpdate();
 		}
-		while (true)
-		{
+	}
 
-		}
+	bool Application::OnWindowClose(WindowCloseEvent& e)
+	{
+		m_IsRunning = false;
+		return true;
 	}
 }
